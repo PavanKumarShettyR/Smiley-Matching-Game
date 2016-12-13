@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+  <head>
+    <title>
+      Matching Game
+    </title>
+    <style>
+      h2 {
+        background-color: #E0E0E0;
+        text-align: center;
+      }
+
+      body {
+        background-color: #BDBDBD;
+        background-size: 1366px 768px;
+      }
+
+      img {
+        position: absolute;
+        image-resolution: 100px 100px;
+      }
+
+      #rightside {
+         left: 600px;
+         border-left: 2px solid black;
+       }
+
+      div {
+        position: absolute;
+        width:500px;
+        height:500px;
+      }
+    </style>
+  </head>
+  <body onload="timer()">
+    <h2>MATCHING GAME</h2>
+    <h4>Game Rule : Click on the extra smiling face on the left</h4> TIMER : <input type="text" id="timerun" size="2">  LEVEL : <input type="text" value="1" id="levelnum" size="2"></p>
+    <div id="leftside">
+    </div>
+    <div id="rightside">
+    </div>
+    <script>
+        var numberOfFaces = 5;
+        var level = 1;
+        var theLeftSide = document.getElementById("leftside");
+        var theRightSide = document.getElementById("rightside");
+        var theBody = document.getElementsByTagName("body")[0];
+
+        var c = 120;
+        function timer(){
+          document.getElementById("timerun").value = c;
+          c--;
+          if(c!=-2){t = setTimeout(function(){timer()},1000);}
+          else{
+            setTimeout(gameOver(),1000);
+          }
+        }
+
+        function gameOver(){
+          alert("Game Over" + "\n\n Successfully completed Levels: " +(level-1));
+          theBody.onclick = null;
+          theLeftSide.lastChild.onclick = null;
+          while(theBody.firstChild){
+            theBody.removeChild(theBody.firstChild);
+          }
+          setTimeout('alert("Refresh to Start Again")',100);
+        }
+
+        function generateFaces(){
+          for(var i=0; i<numberOfFaces ; ++i){
+            image1 = document.createElement("img");
+            image1.src = "http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png";
+
+            image1.style.top = Math.floor(Math.random() * 401) + "px";
+            image1.style.left = Math.floor(Math.random() * 501) + "px";
+            theLeftSide.appendChild(image1);
+          }
+          leftSideImages = theLeftSide.cloneNode(true);
+          leftSideImages.removeChild(leftSideImages.lastChild);
+          theRightSide.appendChild(leftSideImages);
+          theLeftSide.lastChild.onclick = function nextLevel(event){
+            event.stopPropagation();
+            document.getElementById("levelnum").value = level +1;
+            level++;
+            numberOfFaces += 5;
+            generateFaces();
+          };
+          theBody.onclick = function gameover1(){
+            alert("Game Over" + "\n\n Successfully completed Levels: " +(level-1));
+            theBody.onclick = null;
+            theLeftSide.lastChild.onclick = null;
+            while(theBody.firstChild){
+              theBody.removeChild(theBody.firstChild);
+            }
+            setTimeout('alert("Refresh to Start Again")',100);
+          };
+        }
+        generateFaces();
+    </script>
+  </body>
+</html>
